@@ -100,7 +100,8 @@ class Record:
         if data_row.get("name"):
             self.name = Name(data_row.get("name"))
             if data_row.get("phone"):
-                self.add_phone(data_row.get("phone").split(";"))
+                phone = [ Phone(p) for p in data_row.get("phone").split(";")]
+                self.add_phone(phone)
             if data_row.get("email"):
                 self.add_email(Email(data_row.get("email")))
             if data_row.get("address"):
@@ -108,6 +109,7 @@ class Record:
             if data_row.get("birthday"):
                 self.add_birthday(Birthday(data_row.get("birthday")))
             return True
+            
 
     def export_data(self) -> dict:
         result = {}

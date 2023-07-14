@@ -10,6 +10,8 @@ def parse_input(command_line: str) -> tuple[ object, list ]:
     line:str = command_line.lower().lstrip()
     for command, commands in COMMANDS.items():
         for command_str in commands:
+            if len(line) > len(command_str):
+                command_str += " "
             if line.startswith(command_str):
                 args = command_line[len(command_str):].strip().split()
                 args = [s.strip() for s in args]
@@ -157,7 +159,7 @@ def split_line_by_commas(line):
     return parts
 
 @output_operation_describe
-#@input_error
+@input_error
 def handler_import_csv(*args) -> str:
     if len(args):
         filename = args[0]
@@ -407,7 +409,7 @@ a_book = AddressBook()
 def main(auto_backup:bool=True, auto_restore:bool=True):
     print("\nChatBot initialized...\n")
     if auto_restore:
-        api("import csv")
+        api("import csv", verbose=False)
     while True:
         try:
             user_input = input("Enter your command >>> ")
@@ -428,7 +430,7 @@ def main(auto_backup:bool=True, auto_restore:bool=True):
         if command == handler_exit:
             break
     if auto_backup:
-        api("export csv")
+        api("export csv", verbose=False)
 
 
 if __name__ == "__main__":
