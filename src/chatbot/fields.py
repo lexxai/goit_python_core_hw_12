@@ -28,8 +28,7 @@ class Field:
         return str(self)
 
     def __str__(self) -> str:
-        return str(self.value)
-
+        return str(self.__value) if self.__value else ""
 # Child classes 
 class Name(Field):
     ...
@@ -97,4 +96,5 @@ class Birthday(Field):
             raise ValueError("wrong date format, not ISO 8601")
 
     def __str__(self):
-        return self.value.isoformat()
+        value = self.__value.isoformat()
+        return value if value else ""

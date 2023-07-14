@@ -21,9 +21,10 @@ def input_error(func):
     def wrapper(*args, **kwargs):
         try:
             return func(*args, **kwargs)
-        except (KeyError, ValueError, IndexError):
-            return "Sorry, there are not enough parameters or their value may be incorrect. "\
-                   "Please use the help for more information."
+        except (KeyError, ValueError, IndexError) as e:
+            error = str(e) 
+            return f"Sorry, there are not enough parameters or their value may be incorrect {error}. "\
+                   "Please use the help for more information. "
         except (FileNotFoundError):
             return "Sorry, there operation with file is incorrect."
         except Exception as e:
