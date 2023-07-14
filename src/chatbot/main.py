@@ -233,7 +233,7 @@ def get_command_handler(command: str) -> object:
 
 
 @input_error
-def api(command: str, *args: list[str]) -> None:
+def api(command: str, *args: list[str], verbose: bool = True) -> None:
     """API for run commands in batch mode
 
     Args:
@@ -245,7 +245,10 @@ def api(command: str, *args: list[str]) -> None:
     
     """
     result = get_command_handler(command)(*args)
-    print(f"api command '{command}': {result}")
+    if verbose:
+        print(f"api command '{command}': {result}")
+    else:
+        return result
 
 
 
