@@ -22,6 +22,13 @@ class AddressBook(UserDict):
         del self.data[key]
         return True
 
+    def search(self, pattern: str) -> str:
+        result = []
+        for r in self.data.values():
+            if r.search_name_phone(pattern):
+                result.append(str(r))
+        return "\n".join(result)
+
 
     def clear(self) -> None:
         self.data.clear()

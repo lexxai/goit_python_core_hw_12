@@ -27,5 +27,5 @@ if __name__ == "__main__":
     ChatBot.api("help", "add birthday")
 
 
-    ChatBot.main()
+    ChatBot.main(auto_backup=False, auto_restore=False)
 

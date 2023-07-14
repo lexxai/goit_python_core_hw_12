@@ -29,7 +29,7 @@ def input_error(func):
         except (FileNotFoundError):
             return "Sorry, there operation with file is incorrect."
         except Exception as e:
-            return "**** Exception other" + e
+            return "**** Exception other: " + str(e)
     return wrapper
 
 
@@ -309,6 +309,15 @@ def get_command_handler(command: str) -> object:
     return handler_undefined
 
 
+@output_operation_describe
+@input_error
+def handler_search(*args) -> str:
+    pattern = args[0]
+    result = a_book.search(pattern)
+    return result
+
+
+
 @input_error
 def api(command: str, *args: list[str], verbose: bool = True) -> None:
     """API for run commands in batch mode
@@ -353,6 +362,7 @@ COMMANDS = {
     handler_show_email: ("show email",),
     handler_show_address: ("show address",),
     handler_add: ("add", "+"),
+    handler_search: ("search",),
     handler_exit: ("good bye", "close", "exit", "q", "quit")
 }
 
@@ -385,6 +395,7 @@ COMMANDS_HELP = {
     handler_help: "List of commands and their description. Also you can use '?' "
                   "for any command as parameter",
     handler_exit: "Exit of bot.",
+    handler_search: ("Search user by pattern in name or phone",),
     handler_undefined: "Help for this command is not yet available"
 }
 
@@ -393,8 +404,10 @@ DEFAULT_CSV_FILE = "chatboot_addresbook.csv"
 a_book = AddressBook()
 
 
-def main():
+def main(auto_backup:bool=True, auto_restore:bool=True):
     print("\nChatBot initialized...\n")
+    if auto_restore:
+        api("import csv")
     while True:
         try:
             user_input = input("Enter your command >>> ")
@@ -414,7 +427,8 @@ def main():
 
         if command == handler_exit:
             break
-
+    if auto_backup:
+        api("export csv")
 
 
 if __name__ == "__main__":

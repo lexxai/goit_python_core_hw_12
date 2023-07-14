@@ -8,12 +8,12 @@ class Record:
                  email: Email = None, 
                  address: Address = None, 
                  birthday: Birthday = None) -> None:
-        self.name = name
-        self.email = email
-        self.address = address
-        self.phone = []
+        self.name: Name = name
+        self.email: Email = email
+        self.address: Address = address
+        self.phone: list(Phone) = []
         self.add_phone(phone)
-        self.birthday = birthday
+        self.birthday: Birthday = birthday
 
 
     def add(self, field: Field) -> bool:
@@ -163,6 +163,14 @@ class Record:
             diff_bd = bd - date_now
             result = diff_bd.days
         return result
+
+    def search_name_phone(self, pattern:str) -> bool:
+            if self.name.search(pattern):
+                return True
+            for p in self.phone:
+                if p.search(pattern):
+                    return True
+            return False
 
 
     def __repr__(self):

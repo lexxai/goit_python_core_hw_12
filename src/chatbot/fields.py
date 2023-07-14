@@ -7,6 +7,13 @@ class Field:
         self.__value = value
         self.value = value
 
+    def search(self, pattern: str, case = False) -> bool:
+        value = str(self.value)
+        if not case:
+            pattern = pattern.lower()
+            value = value.lower()
+        return value.find(pattern) != -1
+
     @property
     def value(self):
         return self.__value
