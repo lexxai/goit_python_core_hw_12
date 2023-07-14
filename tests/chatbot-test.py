@@ -4,7 +4,7 @@ sys.path.append('../src')
 from chatbot import main as ChatBot
 
 if __name__ == "__main__":
-    ChatBot.api("add", "Jon-00", "+38044333223", "3344")
+    ChatBot.api("add", "Jon-00", "+38044333223")
     ChatBot.api("add birthday","Jon-00", "1988-02-17")
     ChatBot.api("add","Jon-01", "+38044333223", "33441")
     ChatBot.api("add","Jon-02", "+38044333223", "33442")  
@@ -17,7 +17,7 @@ if __name__ == "__main__":
     ChatBot.api("add","Jon-09", "+38044333223", "33449")
     ChatBot.api("add","Jon-10", "+38044333223", "33450")
     ChatBot.api("add","Jon-11", "+38044333223", "33451")
-    ChatBot.api("add","Jon-12", "+38044333223", "33452")
+    ChatBot.api("add","Jon-12", "+38044333223")
     ChatBot.api("add email", "Jon-05", "jon05@example.com")
     ChatBot.api("add email", "Jon-02", "jon02@example.com")
     ChatBot.api("add address", "Jon-02", "Vul. Vorota gate 02. office. 1221344")

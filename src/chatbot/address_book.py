@@ -37,9 +37,13 @@ class AddressBook(UserDict):
 
 
     def get_csv(self) -> str:
-        result = [Record.get_csv_header()]
+        result = [Record.get_data_header()]
         result.extend([ str(r.get_csv_row()) for r in self.data.values() ])
         return "\n".join(result)
+
+    
+    def export_data(self) -> list:
+        return [r.export_data() for r in self.data.values()]
 
     
     def __str__(self) -> str:

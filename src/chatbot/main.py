@@ -137,7 +137,7 @@ def handler_export_csv(*args) -> str:
         return False
 
 @output_operation_describe
-@input_error
+#@input_error
 def handler_import_csv(*args) -> str:
     if len(args):
         filename = args[0]
@@ -148,28 +148,28 @@ def handler_import_csv(*args) -> str:
         with open(filename, "r") as f:
             csv_head = f.readline().strip().split(",")
             if len(csv_head):
-                csv_text= f.readlines()
+                for i in a_book.export_data():
+                    print(i)
 
                 a_book.clear()
-
+                csv_text= f.readlines()
+                csv_head_known = {}
+                known_columns = Record.get_data_header_list()
+                for k_col in known_columns:
+                    csv_head_known[k_col] = csv_head.index(k_col)
                 for line in csv_text:
                     line_field = line.strip().replace('"', "").split(",")
                     csv_row = {}
                     try:
-                        csv_row["name"] = line_field[csv_head.index("name")]
-                        csv_row["phone"] = line_field[csv_head.index("phone")].split(";")
-                        csv_row["email"] = line_field[csv_head.index("email")]
-                        csv_row["address"] = line_field[csv_head.index("address")]
-                        csv_row["birthday"] = line_field[csv_head.index("birthday")]
+                        for k_col in known_columns:
+                            csv_row[k_col] = line_field[csv_head_known[k_col]]
                     except ValueError:
                         ...
-
                     record = Record()
                     if record.import_data(csv_row):
                         a_book.add_record(record)
 
                 result = True
-  
     return result
  
 
