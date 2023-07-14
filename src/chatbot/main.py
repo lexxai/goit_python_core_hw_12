@@ -143,32 +143,34 @@ def handler_import_csv(*args) -> str:
         filename = args[0]
     else:
         filename = "chatboot_addresbook.csv"
+    result = False
     if filename:
         with open(filename, "r") as f:
             csv_head = f.readline().strip().split(",")
-            csv_text= f.readlines()
+            if len(csv_head):
+                csv_text= f.readlines()
 
-            a_book.clear()
+                a_book.clear()
 
-            for line in csv_text:
-                line_field = line.strip().replace('"', "").split(",")
-                csv_row = {}
-                try:
-                    csv_row["name"] = line_field[csv_head.index("name")]
-                    csv_row["phone"] = line_field[csv_head.index("phone")].split(";")
-                    csv_row["email"] = line_field[csv_head.index("email")]
-                    csv_row["address"] = line_field[csv_head.index("address")]
-                    csv_row["birthday"] = line_field[csv_head.index("birthday")]
-                except ValueError:
-                    ...
+                for line in csv_text:
+                    line_field = line.strip().replace('"', "").split(",")
+                    csv_row = {}
+                    try:
+                        csv_row["name"] = line_field[csv_head.index("name")]
+                        csv_row["phone"] = line_field[csv_head.index("phone")].split(";")
+                        csv_row["email"] = line_field[csv_head.index("email")]
+                        csv_row["address"] = line_field[csv_head.index("address")]
+                        csv_row["birthday"] = line_field[csv_head.index("birthday")]
+                    except ValueError:
+                        ...
 
-                record = Record()
-                record.import_data(csv_row)
-                a_book.add_record(record)
+                    record = Record()
+                    if record.import_data(csv_row):
+                        a_book.add_record(record)
 
-        return True
-    else:
-        return False
+                result = True
+  
+    return result
  
 
 def handler_hello(*args) -> str:
