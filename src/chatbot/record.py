@@ -63,9 +63,13 @@ class Record:
             https://en.wikipedia.org/wiki/Comma-separated_values
         """
         value = str(value) if value else ""
-        if value.find(",") != -1:
-            value = f'"{value}"'
+
+        isolated_chars = (",",) 
+        for ch in isolated_chars:
+            if ch in value:
+                return f'"{value}"'
         return value
+    
 
 
     def get_csv_row(self) -> str:

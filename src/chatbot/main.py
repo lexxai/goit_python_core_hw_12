@@ -3,6 +3,7 @@ from chatbot.fields import Name, Phone, Birthday, Email, Address
 from chatbot.record import Record
 
 from functools import wraps
+import re
 
 
 def parse_input(command_line: str) -> tuple[ object, list ]:
@@ -137,8 +138,26 @@ def handler_export_csv(*args) -> str:
     else:
         return False
 
+
+def split_line_by_commas(line):
+    parts = []
+    current_part = ''
+    inside_quotes = False
+
+    for char in line:
+        if char == ',' and not inside_quotes:
+            parts.append(current_part.strip())
+            current_part = ''
+        elif char == '"':
+            inside_quotes = not inside_quotes
+        else:
+            current_part += char
+
+    parts.append(current_part.strip())
+    return parts
+
 @output_operation_describe
-@input_error
+#@input_error
 def handler_import_csv(*args) -> str:
     if len(args):
         filename = args[0]
@@ -156,7 +175,8 @@ def handler_import_csv(*args) -> str:
                 for k_col in known_columns:
                     csv_head_known[k_col] = csv_head.index(k_col)
                 for line in csv_text:
-                    line_field = line.strip().replace('"', "").split(",")
+                    #line_field = line.strip().replace('"', "").split(",")
+                    line_field = split_line_by_commas(line.strip())
                     csv_row = {}
                     try:
                         for k_col in known_columns:
