@@ -62,22 +62,26 @@ class Record:
         """
             https://en.wikipedia.org/wiki/Comma-separated_values
         """
+        value = str(value)
         if value.find(",") != -1:
             value = f'"{value}"'
         return value
 
 
     def _remove_None(self, string:str) -> str:
-        return string.replace("None","")
+        return str(string).replace("None","")
 
 
     def get_csv_row(self) -> str:
-        name = str(self.name)
-        phone = self._remove_None(self.get_phones())
-        email = self._remove_None(str(self.email))
-        address = self._remove_None(self.filed_to_csv(str(self.address)))
-        birthday=self._remove_None(str(self.birthday))
-        row = f"{name},{phone},{email},{address},{birthday}"
+        data = self.export_data()
+        data["phone"] = self.get_phones()
+        row = ""
+        for k, v in data.items():
+            value = self._remove_None(self.filed_to_csv(v))
+            if len(row):
+                row += "," + value
+            else:
+                row = value
         return row
 
 

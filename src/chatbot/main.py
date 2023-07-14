@@ -127,7 +127,7 @@ def handler_export_csv(*args) -> str:
     if len(args):
         filename = args[0]
     else:
-        filename = "chatboot_addresbook.csv"
+        filename = DEFAULT_CSV_FILE
     if filename and any(a_book.keys()):
         with open(filename, "w") as f:
             string = a_book.get_csv()
@@ -137,20 +137,17 @@ def handler_export_csv(*args) -> str:
         return False
 
 @output_operation_describe
-#@input_error
+@input_error
 def handler_import_csv(*args) -> str:
     if len(args):
         filename = args[0]
     else:
-        filename = "chatboot_addresbook.csv"
+        filename = DEFAULT_CSV_FILE
     result = False
     if filename:
         with open(filename, "r") as f:
             csv_head = f.readline().strip().split(",")
             if len(csv_head):
-                for i in a_book.export_data():
-                    print(i)
-
                 a_book.clear()
                 csv_text= f.readlines()
                 csv_head_known = {}
@@ -369,6 +366,8 @@ COMMANDS_HELP = {
     handler_exit: "Exit of bot.",
     handler_undefined: "Help for this command is not yet available"
 }
+
+DEFAULT_CSV_FILE = "chatboot_addresbook.csv"
 
 a_book = AddressBook()
 
