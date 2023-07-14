@@ -2,7 +2,6 @@ from chatbot.address_book import AddressBook
 from chatbot.fields import Name, Phone, Birthday, Email, Address
 from chatbot.record import Record
 
-
 from functools import wraps
 
 
@@ -25,6 +24,8 @@ def input_error(func):
         except (KeyError, ValueError, IndexError):
             return "Sorry, there are not enough parameters or their value may be incorrect. "\
                    "Please use the help for more information."
+        except (FileNotFoundError):
+            return "Sorry, there operation with file is incorrect."
         except Exception as e:
             return "**** Exception other" + e
     return wrapper
@@ -89,6 +90,12 @@ def handler_delete_record(*args) -> str:
 
 
 @output_operation_describe
+@input_error
+def handler_delete_all_records(*args) -> str:
+    if args[0] == "YES":
+        return a_book.clear()
+
+@output_operation_describe
 def handler_show_all(*args) -> str:
     if a_book.len():
         return str(a_book)
@@ -113,6 +120,56 @@ def handler_show_csv(*args) -> str:
     else:
         return "No users found, maybe you want to add them first?"
 
+
+@output_operation_describe
+@input_error
+def handler_export_csv(*args) -> str:
+    if len(args):
+        filename = args[0]
+    else:
+        filename = "chatboot_addresbook.csv"
+    if filename and any(a_book.keys()):
+        with open(filename, "w") as f:
+            string = a_book.get_csv()
+            f.write(string) 
+        return f"saved to filename : {filename}"
+    else:
+        return False
+
+@output_operation_describe
+@input_error
+def handler_import_csv(*args) -> str:
+    if len(args):
+        filename = args[0]
+    else:
+        filename = "chatboot_addresbook.csv"
+    if filename:
+        with open(filename, "r") as f:
+            csv_head = f.readline().strip().split(",")
+            csv_text= f.readlines()
+
+            a_book.clear()
+
+            for line in csv_text:
+                line_field = line.strip().replace('"', "").split(",")
+                csv_row = {}
+                try:
+                    csv_row["name"] = line_field[csv_head.index("name")]
+                    csv_row["phone"] = line_field[csv_head.index("phone")].split(";")
+                    csv_row["email"] = line_field[csv_head.index("email")]
+                    csv_row["address"] = line_field[csv_head.index("address")]
+                    csv_row["birthday"] = line_field[csv_head.index("birthday")]
+                except ValueError:
+                    ...
+
+                record = Record()
+                record.import_data(csv_row)
+                a_book.add_record(record)
+
+        return True
+    else:
+        return False
+ 
 
 def handler_hello(*args) -> str:
     return "How can I help you?"
@@ -255,12 +312,15 @@ def api(command: str, *args: list[str], verbose: bool = True) -> None:
 COMMANDS = {
     handler_hello: ("hello",),
     handler_delete_record: ("delete user", "-"),
+    handler_delete_all_records: ("delete all records",),
     handler_change_phone: ("change phone",),
     handler_delete_phone: ("delete phone",),
     handler_show_phone: ("show phone",),
     handler_show_all: ("show all", "list", "l"),
     handler_show_page: ("show page",),
     handler_show_csv: ("show csv",),
+    handler_export_csv: ("export csv", "e"),
+    handler_import_csv: ("import csv", "i"),
     handler_help: ("help","?"),
     handler_add_birthday: ("add birthday",), 
     handler_delete_birthday: ("delete birthday",), 
@@ -280,6 +340,7 @@ COMMANDS = {
 COMMANDS_HELP = {
     handler_hello: "Just hello",
     handler_delete_record: "Delete ALL records of user. Required username.",
+    handler_delete_all_records: "Delete ALL records of ALL user. Required parameter YES",
     handler_change_phone: "Change user's phone. Required username, old phone, new phone",
     handler_delete_phone: "Delete user's phone. Required username, phone",
     handler_delete_email: "Delete user's email. Required username, email",
@@ -296,6 +357,8 @@ COMMANDS_HELP = {
     handler_show_all: "Show all user's record.",
     handler_show_page: "Show all user's record per page. Optional parameter size of page [10]",
     handler_show_csv: "Show all user's record in csv format",
+    handler_export_csv: ("Export all user's record in csv format to file. Optional parameter filename",),
+    handler_import_csv: ("Import all user's record in csv format to file. Optional parameter filename",),
     handler_days_to_birthday: "Show days until the user's birthday. Required username,",
     handler_add: "Add user's phone or multiple phones separated by space. "
                  "Required username and phone.",

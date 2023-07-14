@@ -6,37 +6,51 @@ class AddressBook(UserDict):
     def __init__(self, records_per_page=10, *args, **kwargs):
         self.max_records_per_page = records_per_page
         super().__init__(self, *args, **kwargs)
+        
 
     def add_record(self, rec):
         key = rec.name.value
         self.data[key] = rec
         return True
+        
     
     def get_record(self, key) -> Record:
         return self.data[key]
+
 
     def remove_record(self, key) -> None:
         del self.data[key]
         return True
 
+
+    def clear(self) -> None:
+        self.data.clear()
+        return True
+
+
     def len(self):
         return len(self.data)
 
+
     def __repr__(self) -> str:
         return str(self)
+
 
     def get_csv(self) -> str:
         result = [Record.get_csv_header()]
         result.extend([ str(r.get_csv_row()) for r in self.data.values() ])
         return "\n".join(result)
+
     
     def __str__(self) -> str:
         result = [ str(i) for i in self.data.values() ]
         return "\n".join(result)
 
+
     def __iter__(self):
         self._page_pos = 0
         return self
+
 
     def __next__(self) -> list[Record]:
         if self._page_pos < len(self.data.keys()):
