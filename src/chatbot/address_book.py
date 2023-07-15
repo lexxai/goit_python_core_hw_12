@@ -97,38 +97,40 @@ class AddressBook(UserDict):
             filename = self.default_filename + ".csv"
         result = False
         if filename:
-            with open(filename, "r") as f:
-                csv_head = f.readline().strip().split(",")
-                if len(csv_head):
-                    self.clear()
-                    csv_text = f.readlines()
-                    csv_head_known = {}
-                    known_columns = Record.get_data_header_list()
-                    for k_col in known_columns:
-                        csv_head_known[k_col] = csv_head.index(k_col)
-                    for line in csv_text:
-                        line_field = self._split_line_by_commas(line.strip())
-                        csv_row = {}
-                        try:
-                            for k_col in known_columns:
-                                csv_row[k_col] = line_field[csv_head_known[k_col]]
-                        except ValueError:
-                            ...
-                        record = Record()
-                        if record.import_data(csv_row):
-                            self.add_record(record)
-
-                    result = True
+            try:
+                with open(filename, "r") as f:
+                    csv_head = f.readline().strip().split(",")
+                    if len(csv_head):
+                        self.clear()
+                        csv_text = f.readlines()
+                        csv_head_known = {}
+                        known_columns = Record.get_data_header_list()
+                        for k_col in known_columns:
+                            csv_head_known[k_col] = csv_head.index(k_col)
+                        for line in csv_text:
+                            line_field = self._split_line_by_commas(line.strip())
+                            csv_row = {}
+                            try:
+                                for k_col in known_columns:
+                                    csv_row[k_col] = line_field[csv_head_known[k_col]]
+                            except ValueError:
+                                ...
+                            record = Record()
+                            if record.import_data(csv_row):
+                                self.add_record(record)
+                        result = True
+            except FileNotFoundError:
+                ...
         return result
 
     def __enter__(self):
-        print("__enter__")
+        #print("__enter__")
         if self.auto_restore:
             self.import_csv()
         return self
 
-    def __exit__(self, ext_type, ext_value,  traceback):
-        print("__exit___")
+    def __exit__(self, ext_type, ext_value, traceback):
+        #print("__exit___")
         if self.auto_backup:
             self.export_csv()
 

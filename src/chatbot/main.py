@@ -358,14 +358,21 @@ DEFAULT_CSV_FILE = "chatboot_addresbook.csv"
 a_book = None
 
 
-def main(auto_backup:bool=True, auto_restore:bool=True):
+def main(auto_backup:bool=True, auto_restore:bool=True, init_callback = None):
     print("\nChatBot initialized...\n")
+
+    if init_callback:
+            auto_backup = False
+            auto_restore = False
 
     with AddressBook(auto_backup=auto_backup, 
                      auto_restore=auto_restore) as _a_book:
 
         global a_book
         a_book = _a_book
+
+        if init_callback:
+            init_callback()
 
         # if auto_restore:
         #     api("import csv", verbose=False)
