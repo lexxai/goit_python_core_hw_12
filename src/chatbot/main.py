@@ -1,9 +1,8 @@
 from chatbot.address_book import AddressBook
 from chatbot.fields import Name, Phone, Birthday, Email, Address
 from chatbot.record import Record
-
 from functools import wraps
-#import re
+
 
 
 def parse_input(command_line: str) -> tuple[ object, list ]:
@@ -43,13 +42,12 @@ def output_operation_describe(func):
                 return result
             else:
                 return "Done" if result else "The operation was not successful"
-            
     return wrapper
 
 
 @output_operation_describe
 @input_error
-def handler_add(*args) -> str:
+def handler_add(*args, a_book) -> str:
     result = None
     user = args[0]
     args[1]
@@ -64,7 +62,7 @@ def handler_add(*args) -> str:
 
 @output_operation_describe
 @input_error
-def handler_change_phone(*args) -> str:
+def handler_change_phone(*args, a_book) -> str:
     user = args[0]
     old_phone = args[1]
     new_phone = args[2]
@@ -73,14 +71,14 @@ def handler_change_phone(*args) -> str:
 
 @output_operation_describe
 @input_error
-def handler_show_phone(*args) -> str:
+def handler_show_phone(*args, a_book) -> str:
     user = args[0]
     return a_book.get_record(user).get_phones()
 
 
 @output_operation_describe
 @input_error
-def handler_delete_phone(*args) -> str:
+def handler_delete_phone(*args, a_book) -> str:
     user = args[0]
     phone = args[1]
     return a_book.get_record(user).remove_phone(Phone(phone))
@@ -88,19 +86,19 @@ def handler_delete_phone(*args) -> str:
 
 @output_operation_describe
 @input_error
-def handler_delete_record(*args) -> str:
+def handler_delete_record(*args, a_book) -> str:
     user = args[0]
     return a_book.remove_record(user)
 
 
 @output_operation_describe
 @input_error
-def handler_delete_all_records(*args) -> str:
+def handler_delete_all_records(*args, a_book) -> str:
     if args[0] == "YES":
         return a_book.clear()
 
 @output_operation_describe
-def handler_show_all(*args) -> str:
+def handler_show_all(*args, a_book) -> str:
     if a_book.len():
         return str(a_book)
     else:
@@ -108,7 +106,7 @@ def handler_show_all(*args) -> str:
 
 
 @input_error
-def handler_show_page(*args) -> str:
+def handler_show_page(*args, a_book) -> str:
     if args[0]:
         a_book.max_records_per_page = int(args[0])
     try:
@@ -118,7 +116,7 @@ def handler_show_page(*args) -> str:
         return "End list"               
 
 
-def handler_show_csv(*args) -> str:
+def handler_show_csv(*args, a_book) -> str:
     if any(a_book.keys()):
         return a_book.get_csv()
     else:
@@ -127,16 +125,17 @@ def handler_show_csv(*args) -> str:
 
 @output_operation_describe
 @input_error
-def handler_export_csv(*args) -> str:
+def handler_export_csv(*args, a_book) -> str:
     if len(args):
         filename = args[0]
     else:
         filename = None
     return (a_book.export_csv(filename))
 
+
 @output_operation_describe
 @input_error
-def handler_import_csv(*args) -> str:
+def handler_import_csv(*args, a_book) -> str:
     if len(args):
         filename = args[0]
     else:
@@ -144,11 +143,11 @@ def handler_import_csv(*args) -> str:
     return a_book.import_csv(filename)
  
 
-def handler_hello(*args) -> str:
+def handler_hello(*args, a_book) -> str:
     return "How can I help you?"
 
 
-def handler_help(*args) -> str:
+def handler_help(*args, a_book) -> str:
     command = None
     if len(args):
         command = args[0]
@@ -165,7 +164,7 @@ def handler_help(*args) -> str:
 
 @output_operation_describe
 @input_error
-def handler_add_birthday(*args) -> str:
+def handler_add_birthday(*args, a_book) -> str:
     user = args[0]
     birthday = args[1]
     return a_book.get_record(user).add(Birthday(birthday))
@@ -173,7 +172,7 @@ def handler_add_birthday(*args) -> str:
 
 @output_operation_describe
 @input_error
-def handler_add_email(*args) -> str:
+def handler_add_email(*args, a_book) -> str:
     user = args[0]
     email = args[1]
     return a_book.get_record(user).add(Email(email))
@@ -181,7 +180,7 @@ def handler_add_email(*args) -> str:
 
 @output_operation_describe
 @input_error
-def handler_add_address(*args) -> str:
+def handler_add_address(*args, a_book) -> str:
     user = args[0]
     address = " ".join(args[1:])
     return a_book.get_record(user).add(Address(address))
@@ -189,28 +188,28 @@ def handler_add_address(*args) -> str:
 
 @output_operation_describe
 @input_error
-def handler_delete_birthday(*args) -> str:
+def handler_delete_birthday(*args, a_book) -> str:
     user = args[0]
     return a_book.get_record(user).delete_birthday()
 
 
 @output_operation_describe
 @input_error
-def handler_delete_email(*args) -> str:
+def handler_delete_email(*args, a_book) -> str:
     user = args[0]
     return a_book.get_record(user).delete_email()
 
 
 @output_operation_describe
 @input_error
-def handler_delete_address(*args) -> str:
+def handler_delete_address(*args, a_book) -> str:
     user = args[0]
     return a_book.get_record(user).delete_address()
 
 
 @output_operation_describe
 @input_error
-def handler_days_to_birthday(*args) -> str:
+def handler_days_to_birthday(*args, a_book) -> str:
     user = args[0]
     result = a_book.get_record(user).days_to_birthday()
     if result is None:
@@ -224,7 +223,7 @@ def handler_days_to_birthday(*args) -> str:
 
 @output_operation_describe
 @input_error
-def handler_show_birthday(*args) -> str:
+def handler_show_birthday(*args, a_book) -> str:
     user = args[0]
     result = a_book.get_record(user).birthday
     return result
@@ -232,7 +231,7 @@ def handler_show_birthday(*args) -> str:
 
 @output_operation_describe
 @input_error
-def handler_show_email(*args) -> str:
+def handler_show_email(*args, a_book) -> str:
     user = args[0]
     result = a_book.get_record(user).email
     return result
@@ -240,17 +239,17 @@ def handler_show_email(*args) -> str:
 
 @output_operation_describe
 @input_error
-def handler_show_address(*args) -> str:
+def handler_show_address(*args, a_book) -> str:
     user = args[0]
     result = a_book.get_record(user).address
     return result
 
 
-def handler_exit(*args) -> str:
+def handler_exit(*args, a_book) -> str:
     return ""
 
 
-def handler_undefined(*args) -> str:
+def handler_undefined(*args, a_book) -> str:
     return handler_help()
 
 
@@ -264,7 +263,7 @@ def get_command_handler(command: str) -> object:
 
 @output_operation_describe
 @input_error
-def handler_search(*args) -> str:
+def handler_search(*args, a_book) -> str:
     pattern = args[0]
     result = a_book.search(pattern)
     return result
@@ -272,7 +271,7 @@ def handler_search(*args) -> str:
 
 
 @input_error
-def api(command: str, *args: list[str], verbose: bool = True) -> None:
+def api(command: str, *args: list[str], a_book, verbose: bool = True) -> None:
     """API for run commands in batch mode
 
     Args:
@@ -283,7 +282,7 @@ def api(command: str, *args: list[str], verbose: bool = True) -> None:
         print API command result
     
     """
-    result = get_command_handler(command)(*args)
+    result = get_command_handler(command)(*args, a_book=a_book)
     if verbose:
         print(f"api command '{command}': {result}")
     else:
@@ -352,12 +351,6 @@ COMMANDS_HELP = {
     handler_undefined: "Help for this command is not yet available"
 }
 
-DEFAULT_CSV_FILE = "chatboot_addresbook.csv"
-
-#a_book = AddressBook()
-a_book = None
-
-
 def main(auto_backup:bool=True, auto_restore:bool=True, init_callback = None):
     print("\nChatBot initialized...\n")
 
@@ -366,16 +359,10 @@ def main(auto_backup:bool=True, auto_restore:bool=True, init_callback = None):
             auto_restore = False
 
     with AddressBook(auto_backup=auto_backup, 
-                     auto_restore=auto_restore) as _a_book:
-
-        global a_book
-        a_book = _a_book
+                     auto_restore=auto_restore) as a_book:
 
         if init_callback:
-            init_callback()
-
-        # if auto_restore:
-        #     api("import csv", verbose=False)
+            init_callback(a_book)
 
         while True:
             try:
@@ -387,18 +374,15 @@ def main(auto_backup:bool=True, auto_restore:bool=True, init_callback = None):
             command, args = parse_input(user_input)
             
             if len(args) == 1 and  args[0] == "?" :
-                result = handler_help(command)
+                result = handler_help(command, a_book=a_book)
             else:
-                result = command(*args)
+                result = command(*args, a_book=a_book)
             
             if result:
                     print(result)
 
             if command == handler_exit:
                 break
-
-        # if auto_backup:
-        #     api("export csv", verbose=False)
 
 
 if __name__ == "__main__":
