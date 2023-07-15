@@ -3,7 +3,7 @@ from chatbot.fields import Name, Phone, Birthday, Email, Address
 from chatbot.record import Record
 
 from functools import wraps
-import re
+#import re
 
 
 def parse_input(command_line: str) -> tuple[ object, list ]:
@@ -131,32 +131,8 @@ def handler_export_csv(*args) -> str:
     if len(args):
         filename = args[0]
     else:
-        filename = DEFAULT_CSV_FILE
-    if filename and any(a_book.keys()):
-        with open(filename, "w") as f:
-            string = a_book.get_csv()
-            f.write(string) 
-        return f"saved to filename : {filename}"
-    else:
-        return False
-
-
-def split_line_by_commas(line):
-    parts = []
-    current_part = ''
-    inside_quotes = False
-
-    for char in line:
-        if char == ',' and not inside_quotes:
-            parts.append(current_part.strip())
-            current_part = ''
-        elif char == '"':
-            inside_quotes = not inside_quotes
-        else:
-            current_part += char
-
-    parts.append(current_part.strip())
-    return parts
+        filename = None
+    return (a_book.export_csv(filename))
 
 @output_operation_describe
 @input_error
@@ -164,33 +140,8 @@ def handler_import_csv(*args) -> str:
     if len(args):
         filename = args[0]
     else:
-        filename = DEFAULT_CSV_FILE
-    result = False
-    if filename:
-        with open(filename, "r") as f:
-            csv_head = f.readline().strip().split(",")
-            if len(csv_head):
-                a_book.clear()
-                csv_text= f.readlines()
-                csv_head_known = {}
-                known_columns = Record.get_data_header_list()
-                for k_col in known_columns:
-                    csv_head_known[k_col] = csv_head.index(k_col)
-                for line in csv_text:
-                    #line_field = line.strip().replace('"', "").split(",")
-                    line_field = split_line_by_commas(line.strip())
-                    csv_row = {}
-                    try:
-                        for k_col in known_columns:
-                            csv_row[k_col] = line_field[csv_head_known[k_col]]
-                    except ValueError:
-                        ...
-                    record = Record()
-                    if record.import_data(csv_row):
-                        a_book.add_record(record)
-
-                result = True
-    return result
+        filename = None
+    return a_book.import_csv(filename)
  
 
 def handler_hello(*args) -> str:
@@ -344,7 +295,7 @@ COMMANDS = {
     handler_hello: ("hello",),
     handler_delete_record: ("delete user", "-"),
     handler_delete_all_records: ("delete all records",),
-    handler_change_phone: ("change phone",),
+    handler_change_phone: ("change phone","="),
     handler_delete_phone: ("delete phone",),
     handler_show_phone: ("show phone",),
     handler_show_all: ("show all", "list", "l"),
@@ -403,34 +354,44 @@ COMMANDS_HELP = {
 
 DEFAULT_CSV_FILE = "chatboot_addresbook.csv"
 
-a_book = AddressBook()
+#a_book = AddressBook()
+a_book = None
 
 
 def main(auto_backup:bool=True, auto_restore:bool=True):
     print("\nChatBot initialized...\n")
-    if auto_restore:
-        api("import csv", verbose=False)
-    while True:
-        try:
-            user_input = input("Enter your command >>> ")
-        except KeyboardInterrupt:
-            print("\r")
-            break
-        
-        command, args = parse_input(user_input)
-        
-        if len(args) == 1 and  args[0] == "?" :
-            result = handler_help(command)
-        else:
-            result = command(*args)
-        
-        if result:
-                print(result)
 
-        if command == handler_exit:
-            break
-    if auto_backup:
-        api("export csv", verbose=False)
+    with AddressBook(auto_backup=auto_backup, 
+                     auto_restore=auto_restore) as _a_book:
+
+        global a_book
+        a_book = _a_book
+
+        # if auto_restore:
+        #     api("import csv", verbose=False)
+
+        while True:
+            try:
+                user_input = input("Enter your command >>> ")
+            except KeyboardInterrupt:
+                print("\r")
+                break
+            
+            command, args = parse_input(user_input)
+            
+            if len(args) == 1 and  args[0] == "?" :
+                result = handler_help(command)
+            else:
+                result = command(*args)
+            
+            if result:
+                    print(result)
+
+            if command == handler_exit:
+                break
+
+        # if auto_backup:
+        #     api("export csv", verbose=False)
 
 
 if __name__ == "__main__":

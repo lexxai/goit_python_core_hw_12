@@ -3,8 +3,15 @@ from chatbot.record import Record
 
 class AddressBook(UserDict):
 
-    def __init__(self, records_per_page=10, *args, **kwargs):
+    def __init__(self, records_per_page :int = 10, 
+                 default_filename :str = "chatboot_addresbook",
+                 auto_backup: bool = True,
+                 auto_restore: bool = True,
+                 *args, **kwargs):
         self.max_records_per_page = records_per_page
+        self.default_filename = default_filename
+        self.auto_backup = auto_backup
+        self.auto_restore = auto_restore
         super().__init__(self, *args, **kwargs)
         
 
@@ -51,6 +58,79 @@ class AddressBook(UserDict):
     
     def export_data(self) -> list:
         return [r.export_data() for r in self.data.values()]
+
+
+    def _split_line_by_commas(self, line):
+        parts = []
+        current_part = ''
+        inside_quotes = False
+
+        for char in line:
+            if char == ',' and not inside_quotes:
+                parts.append(current_part.strip())
+                current_part = ''
+            elif char == '"':
+                inside_quotes = not inside_quotes
+            else:
+                current_part += char
+
+        parts.append(current_part.strip())
+        return parts
+
+    def export_csv(self, *args) -> str:
+        if len(args) and args[0]:
+            filename = args[0]
+        else:
+            filename = self.default_filename + ".csv"
+        if filename and any(self.keys()):
+            with open(filename, "w") as f:
+                string = self.get_csv()
+                f.write(string)
+            return f"saved to filename : {filename}"
+        else:
+            return False
+
+    def import_csv(self, *args) -> str:
+        if len(args) and args[0]:
+            filename = args[0]
+        else:
+            filename = self.default_filename + ".csv"
+        result = False
+        if filename:
+            with open(filename, "r") as f:
+                csv_head = f.readline().strip().split(",")
+                if len(csv_head):
+                    self.clear()
+                    csv_text = f.readlines()
+                    csv_head_known = {}
+                    known_columns = Record.get_data_header_list()
+                    for k_col in known_columns:
+                        csv_head_known[k_col] = csv_head.index(k_col)
+                    for line in csv_text:
+                        line_field = self._split_line_by_commas(line.strip())
+                        csv_row = {}
+                        try:
+                            for k_col in known_columns:
+                                csv_row[k_col] = line_field[csv_head_known[k_col]]
+                        except ValueError:
+                            ...
+                        record = Record()
+                        if record.import_data(csv_row):
+                            self.add_record(record)
+
+                    result = True
+        return result
+
+    def __enter__(self):
+        print("__enter__")
+        if self.auto_restore:
+            self.import_csv()
+        return self
+
+    def __exit__(self, ext_type, ext_value,  traceback):
+        print("__exit___")
+        if self.auto_backup:
+            self.export_csv()
 
     
     def __str__(self) -> str:
