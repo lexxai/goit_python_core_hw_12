@@ -5,6 +5,7 @@ class AddressBook(UserDict):
 
     def __init__(self, records_per_page :int = 10, 
                  default_filename :str = "chatboot_addresbook",
+                 id: str = None,
                  auto_backup: bool = True,
                  auto_restore: bool = True,
                  *args, **kwargs):
@@ -12,6 +13,7 @@ class AddressBook(UserDict):
         self.default_filename = default_filename
         self.auto_backup = auto_backup
         self.auto_restore = auto_restore
+        self.id = id
         super().__init__(self, *args, **kwargs)
         
 
@@ -77,18 +79,26 @@ class AddressBook(UserDict):
         parts.append(current_part.strip())
         return parts
 
+        
+    def _gen_filename(self, filename: str) -> str:
+        if self.id:
+            filename = f"{self.id}_{filename}"
+        return filename
+
+
     def export_csv(self, *args) -> str:
         if len(args) and args[0]:
             filename = args[0]
         else:
             filename = self.default_filename + ".csv"
         if filename and any(self.keys()):
-            with open(filename, "w") as f:
+            with open(self._gen_filename(filename), "w") as f:
                 string = self.get_csv()
                 f.write(string)
             return f"saved to filename : {filename}"
         else:
             return False
+
 
     def import_csv(self, *args) -> str:
         if len(args) and args[0]:
@@ -98,7 +108,7 @@ class AddressBook(UserDict):
         result = False
         if filename:
             try:
-                with open(filename, "r") as f:
+                with open(self._gen_filename(filename), "r") as f:
                     csv_head = f.readline().strip().split(",")
                     if len(csv_head):
                         self.clear()

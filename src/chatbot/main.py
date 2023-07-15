@@ -351,15 +351,20 @@ COMMANDS_HELP = {
     handler_undefined: "Help for this command is not yet available"
 }
 
-def main(auto_backup:bool=True, auto_restore:bool=True, init_callback = None):
+def main(id: str = None, 
+         auto_backup: bool = True, 
+         auto_restore: bool = True, 
+         init_callback = None):
+
     print("\nChatBot initialized...\n")
 
     if init_callback:
             auto_backup = False
             auto_restore = False
 
-    with AddressBook(auto_backup=auto_backup, 
-                     auto_restore=auto_restore) as a_book:
+    with AddressBook(id = id, 
+                     auto_backup = auto_backup, 
+                     auto_restore = auto_restore) as a_book:
 
         if init_callback:
             init_callback(a_book)
