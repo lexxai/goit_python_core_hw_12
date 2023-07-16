@@ -1,5 +1,13 @@
 # goit_python_core_hw_12
 
+## v.0.4.5
+
+- Tune alias list of commands on list of commands: example `show address ('?a'), show all ('list','l'), `
+- Added filer of unknown commands in list of commands: example
+
+````Enter your command >>> show
+List of commands: show address ('?a'), show all ('list','l'), show birthday ('?b'), show csv ('?csv'), show email ('?e'), show page ('?p'), show phone ('?p')```
+
 ## v.0.4.4
 
 - Split functions of commands to module list_commands.py
@@ -21,7 +29,8 @@
 
 ### OUTPUT
 
-```
+````
+
 ChatBot initialized...
 
 Enter your command >>> l
@@ -147,4 +156,7 @@ Enter your command >>> ? q
 Exit of bot.
 Enter your command >>> q
 Goodbye. We are looking forward to seeing you again.
+
+```
+
 ```
