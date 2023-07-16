@@ -175,8 +175,21 @@ def handler_help(*args, a_book) -> str:
     if len(args):
         command = args[0]
     if not command:
-        commands = sorted(list(c for cs in COMMANDS.values() for c in list(cs)))
-        return "List of commands: " + ", ".join(commands)
+        commands = []
+        for cs in COMMANDS.values():
+            c_str = ""
+            c_alias = []
+            for c in list(cs):
+                if len(c_str) == 0:
+                    c_str = c
+                else:
+                    c_alias.append(f"'{c}'")
+            c_alias_str = ",".join(c_alias)
+            if any(c_alias):
+                c_str += f" ({c_alias_str})"
+            commands.append(c_str)
+        #commands = sorted(list(c for cs in COMMANDS.values() for c in list(cs)))
+        return "List of commands: " + ", ".join(sorted(commands))
     else:
         if type(command) == str:
             command = " ".join(args)
@@ -254,7 +267,7 @@ def handler_days_to_birthday(*args, a_book) -> str:
 @input_error
 def handler_show_birthday(*args, a_book) -> str:
     user = args[0]
-    result = a_book.get_record(user).birthday
+    result = str(a_book.get_record(user).birthday)
     return result
 
 
@@ -279,6 +292,10 @@ def handler_exit(*args, a_book) -> str:
 
 
 def handler_undefined(*args, a_book) -> str:
+    return handler_help(a_book=a_book)
+
+
+def handler_show(*args, a_book) -> str:
     return handler_help(a_book=a_book)
 
 
@@ -324,29 +341,30 @@ CONSTANT DICT OF COMMANDS LIST
 COMMANDS = {
     handler_hello: ("hello",),
     handler_delete_record: ("delete user", "-"),
-    handler_delete_all_records: ("delete all records",),
-    handler_change_phone: ("change phone", "="),
-    handler_delete_phone: ("delete phone",),
-    handler_show_phone: ("show phone",),
+    handler_delete_all_records: ("delete all records","---"),
+    handler_change_phone: ("change phone", "=p"),
+    handler_delete_phone: ("delete phone","-p"),
+    handler_show_phone: ("show phone","?p"),
     handler_show_all: ("show all", "list", "l"),
-    handler_show_page: ("show page",),
-    handler_show_csv: ("show csv",),
+    handler_show_page: ("show page","?p"),
+    handler_show_csv: ("show csv","?csv"),
     handler_export_csv: ("export csv", "e"),
     handler_import_csv: ("import csv", "i"),
     handler_help: ("help", "?"),
-    handler_add_birthday: ("add birthday",),
-    handler_delete_birthday: ("delete birthday",),
-    handler_add_email: ("add email",),
-    handler_delete_email: ("delete email",),
-    handler_add_address: ("add address",),
-    handler_delete_address: ("delete address",),
-    handler_days_to_birthday:  ("to birthday", ),
-    handler_show_birthday: ("show birthday",),
-    handler_show_email: ("show email",),
-    handler_show_address: ("show address",),
+    handler_add_birthday: ("add birthday","+b"),
+    handler_delete_birthday: ("delete birthday","-b"),
+    handler_add_email: ("add email","+e"),
+    handler_delete_email: ("delete email","-e"),
+    handler_add_address: ("add address","+a"),
+    handler_delete_address: ("delete address","-a"),
+    handler_days_to_birthday:  ("to birthday", "2b"),
+    handler_show_birthday: ("show birthday","?b"),
+    handler_show_email: ("show email","?e"),
+    handler_show_address: ("show address","?a"),
     handler_add: ("add", "+"),
-    handler_search: ("search",),
-    handler_exit: ("good bye", "close", "exit", "q", "quit")
+    handler_search: ("search","?="),
+    handler_exit: ("good bye", "close", "exit", "q", "quit"),
+    handler_show: ("",)
 }
 
 """

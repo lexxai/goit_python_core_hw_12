@@ -111,7 +111,7 @@ class AddressBook(UserDict):
                                 if record.import_data(csv_row):
                                     self.add_record(record)
                         result = True
-            except FileNotFoundError:
+            except (FileNotFoundError, ValueError):
                 ...
         return result
 
