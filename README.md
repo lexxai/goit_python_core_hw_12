@@ -1,8 +1,25 @@
 # goit_python_core_hw_12
 
-## test
+## v.0.4.4
 
-### v.0.4.0
+Split functions of commands to module list_commands.py
+Used external csv module for export import csv
+Added quoted parameters, like "Jon 11"
+Added user session id. Used on hidden file name of csv files.
+
+- main(id: str = None
+- AddressBook(id: str = None,
+
+Added parameters to main / AddressBook
+
+- auto_backup
+- auto_restores
+
+Added parameter to main
+
+- init_callback = None, pointer to batch function on init
+
+### OUTPUT
 
 ```
 ChatBot initialized...
