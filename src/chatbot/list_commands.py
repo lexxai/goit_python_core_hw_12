@@ -3,6 +3,24 @@ from chatbot.record import Record
 from functools import wraps
 
 
+def split_line_by_space(line: str) -> list:
+    parts = []
+    current_part = ''
+    inside_quotes = False
+
+    for char in line:
+        if char == ' ' and not inside_quotes:
+            parts.append(current_part.strip())
+            current_part = ''
+        elif char == '"':
+            inside_quotes = not inside_quotes
+        else:
+            current_part += char
+
+    parts.append(current_part.strip())
+    return parts
+    
+
 def parse_input(command_line: str) -> tuple[object, list]:
     line: str = command_line.lower().lstrip()
     for command, commands in COMMANDS.items():
@@ -10,7 +28,9 @@ def parse_input(command_line: str) -> tuple[object, list]:
             if len(line) > len(command_str):
                 command_str += " "
             if line.startswith(command_str):
-                args = command_line[len(command_str):].strip().split()
+                #args = command_line[len(command_str):].strip().split()
+                args = split_line_by_space(
+                    command_line[len(command_str):].strip())
                 args = [s.strip() for s in args]
                 return command, args
     return handler_undefined, []
