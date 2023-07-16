@@ -4,20 +4,20 @@
 
 - Split functions of commands to module list_commands.py
 - Used external csv module for export import csv
-- Added detection of commands only if there is a space after them, if they have parameters 
+- Added detection of commands only if there is a space after them, if they have parameters
 - Added quoted parameters, like "Jon 11"
 - Added a user session ID. It is used for hidden naming of csv files. Example: user-session-000001_chatboot_addresbook.csv
-  * main(id: str = None
-  * AddressBook(id: str = None,
+  - main(id: str = None
+  - AddressBook(id: str = None,
 - Added parameters to main / AddressBook
-  * auto_backup: bool = True, 
-  * auto_restore: bool = True,
+  - auto_backup: bool = True,
+  - auto_restore: bool = True,
 - Added parameter to class AddressBook
-  * default_filename :str = "chatboot_addresbook",
+  - default_filename :str = "chatboot_addresbook",
 - Added auto export / auto import on init / quit. Used filename with default name (chatboot_addresbook) and format csv
 - Added parameter to main
-  * init_callback = None, pointer to batch function on init
-  * if init_callback used, then overvriten parameters: auto_backup = False, auto_restore = False,
+  - init_callback = None, pointer to batch function on init
+  - if init_callback used, then overwritten parameters: auto_backup = False, auto_restore = False,
 
 ### OUTPUT
 
@@ -129,9 +129,9 @@ Enter your command >>> export csv
 Exported successfully to "chatboot_addresbook.csv" file
 Enter your command >>> export csv one.csv
 Exported successfully to "one.csv" file
-Enter your command >>> import csv       
+Enter your command >>> import csv
 Done
-import csv one.csv 
+import csv one.csv
 Done
 Enter your command >>> q
 Goodbye. We are looking forward to seeing you again.
