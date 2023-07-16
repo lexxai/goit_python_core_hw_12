@@ -37,7 +37,7 @@ def parse_input(command_line: str) -> tuple[object, list]:
                 args = split_line_by_space(
                     command_line[len(command_str):].strip())
                 return command, args
-    return handler_undefined, []
+    return handler_undefined, [line]
 
 
 def input_error(func):
@@ -170,13 +170,17 @@ def handler_hello(*args, a_book) -> str:
     return "How can I help you?"
 
 
-def handler_help(*args, a_book) -> str:
+def handler_help(*args, a_book, help_filter=None) -> str:
     command = None
     if len(args):
         command = args[0]
     if not command:
         commands = []
         for cs in COMMANDS.values():
+            if help_filter and not any(
+                   filter(lambda x: x.startswith(help_filter), cs)
+                ):
+                continue
             c_str = ""
             c_alias = []
             for c in list(cs):
@@ -292,11 +296,10 @@ def handler_exit(*args, a_book) -> str:
 
 
 def handler_undefined(*args, a_book) -> str:
-    return handler_help(a_book=a_book)
-
-
-def handler_show(*args, a_book) -> str:
-    return handler_help(a_book=a_book)
+    command = None
+    if any(args):
+         command = args[0]
+    return handler_help(a_book=a_book, help_filter=command)
 
 
 def get_command_handler(command: str) -> object:
@@ -364,7 +367,6 @@ COMMANDS = {
     handler_add: ("add", "+"),
     handler_search: ("search","?="),
     handler_exit: ("good bye", "close", "exit", "q", "quit"),
-    handler_show: ("",)
 }
 
 """

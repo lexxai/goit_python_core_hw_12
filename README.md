@@ -133,10 +133,18 @@ Enter your command >>> import csv
 Done
 import csv one.csv
 Done
+Enter your command >>> show
+List of commands: show address ('?a'), show all ('list','l'), show birthday ('?b'), show csv ('?csv'), show email ('?e'), show page ('?p'), show phone ('?p')
+Enter your command >>> delete
+List of commands: delete address ('-a'), delete all records ('---'), delete birthday ('-b'), delete email ('-e'), delete phone ('-p'), delete user ('-')
 Enter your command >>> ?
 List of commands: add ('+'), add address ('+a'), add birthday ('+b'), add email ('+e'), change phone ('=p'), delete address ('-a'), delete all records ('---'), delete birthday ('-b'), delete email ('-e'), delete phone ('-p'), delete user ('-'), export csv ('e'), good bye ('close','exit','q','quit'), hello, help ('?'), import csv ('i'), search ('?='), show address ('?a'), show all ('list','l'), show birthday ('?b'), show csv ('?csv'), show email ('?e'), show page ('?p'), show phone ('?p'), to birthday ('2b')
+Enter your command >>> ch
+List of commands: change phone ('=p')
+Enter your command >>> ad
+List of commands: add ('+'), add address ('+a'), add birthday ('+b'), add email ('+e')
 Enter your command >>> ? q
-Exit of bot.?
+Exit of bot.
 Enter your command >>> q
 Goodbye. We are looking forward to seeing you again.
 ```
