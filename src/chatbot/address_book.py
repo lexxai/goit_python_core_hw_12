@@ -99,14 +99,18 @@ class AddressBook(UserDict):
         if filename:
             try:
                 with open(self._gen_filename(filename), "r") as csv_file:
-                    csv_reader = csv.reader(csv_file, delimiter=',')
-                    csv_reader = csv.DictReader(csv_file)
-                    self.clear()     
-                    for csv_row in csv_reader:
-                        record = Record()
-                        if record.import_data(csv_row):
-                            self.add_record(record)
-                    result = True
+                    fieldnames = Record.get_data_header_list()
+                    csv_reader = csv.DictReader(
+                        csv_file, fieldnames=fieldnames)
+                    if csv_reader:
+                        for csv_row in csv_reader:
+                            if csv_reader.line_num == 2:
+                                self.clear()     
+                            if csv_reader.line_num >= 2:
+                                record = Record()
+                                if record.import_data(csv_row):
+                                    self.add_record(record)
+                        result = True
             except FileNotFoundError:
                 ...
         return result
