@@ -2,12 +2,18 @@ from chatbot.fields import Name, Phone, Birthday, Email, Address
 from chatbot.record import Record
 from functools import wraps
 
+def split_line_by_space(line: str) -> list[str]:
+    """ split_line_by_space with quotes
 
-def split_line_by_space(line: str) -> list:
+    Args:
+        line (str): "Jon 12" +32323243434 33033440
+
+    Returns:
+        list: ["Jon 12", "+32323243434", "33033440"]
+    """
     parts = []
     current_part = ''
     inside_quotes = False
-
     for char in line:
         if char == ' ' and not inside_quotes:
             parts.append(current_part.strip())
@@ -16,10 +22,9 @@ def split_line_by_space(line: str) -> list:
             inside_quotes = not inside_quotes
         else:
             current_part += char
-
     parts.append(current_part.strip())
-    return parts
-    
+    return list(filter(lambda x: x, parts))
+
 
 def parse_input(command_line: str) -> tuple[object, list]:
     line: str = command_line.lower().lstrip()
@@ -31,7 +36,6 @@ def parse_input(command_line: str) -> tuple[object, list]:
                 #args = command_line[len(command_str):].strip().split()
                 args = split_line_by_space(
                     command_line[len(command_str):].strip())
-                args = [s.strip() for s in args]
                 return command, args
     return handler_undefined, []
 
