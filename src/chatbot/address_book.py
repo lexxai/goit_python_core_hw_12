@@ -75,15 +75,17 @@ class AddressBook(UserDict):
         else:
             filename = self.default_filename + ".csv"
         if filename and any(self.keys()):
-            with open(self._gen_filename(filename), "w") as csv_file:
-                fieldnames = Record.get_data_header_list()
-                csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
-                rows = self.export_data()
-                if len(rows):
-                    csv_writer.writeheader()
-                    csv_writer.writerows(rows)
-
-            return f"saved to filename : {filename}"
+            try:
+                with open(self._gen_filename(filename), "w", newline='') as csv_file:
+                    fieldnames = Record.get_data_header_list()
+                    csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+                    rows = self.export_data()
+                    if len(rows):
+                        csv_writer.writeheader()
+                        csv_writer.writerows(rows)
+                return f'Exported successfully to "{filename}" file'
+            except Exception:
+                return False
         else:
             return False
 
@@ -201,7 +203,8 @@ class AddressBook(UserDict):
     def __next__(self) -> list[Record]:
         if self._page_pos < len(self.data.keys()):
             result = []
-            keys = list(self.data)[self._page_pos:self._page_pos+self.max_records_per_page]
+            keys = list(self.data) \
+                    [ self._page_pos:self._page_pos + self.max_records_per_page ]
             for key in keys:
                 result.append(self.data[key])
             self._page_pos += self.max_records_per_page

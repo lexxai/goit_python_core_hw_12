@@ -251,7 +251,7 @@ def handler_show_address(*args, a_book) -> str:
 
 
 def handler_exit(*args, a_book) -> str:
-    return ""
+    return "Goodbye. We are looking forward to seeing you again."
 
 
 def handler_undefined(*args, a_book) -> str:
@@ -292,8 +292,11 @@ def api(command: str, *args: list[str], a_book, verbose: bool = True) -> None:
     else:
         return result
 
-
-
+"""
+CONSTANT DICT OF COMMANDS LIST 
+- key is pointer to handler function 
+- value is list of chat bot commands
+"""
 COMMANDS = {
     handler_hello: ("hello",),
     handler_delete_record: ("delete user", "-"),
@@ -322,7 +325,11 @@ COMMANDS = {
     handler_exit: ("good bye", "close", "exit", "q", "quit")
 }
 
-
+"""
+CONSTANT DICT OF COMMANDS HELP 
+- key is pointer to handler function 
+- value is help text for commands
+"""
 COMMANDS_HELP = {
     handler_hello: "Just hello",
     handler_delete_record: "Delete ALL records of user. Required username.",

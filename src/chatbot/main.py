@@ -8,7 +8,7 @@ def main(id: str = None,
          auto_restore: bool = True, 
          init_callback = None):
 
-    print("\nChatBot initialized...\n")
+    print("\nInitializing a ChatBot...\n")
 
     if init_callback:
             auto_backup = False
