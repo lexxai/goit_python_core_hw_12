@@ -2,11 +2,13 @@
 
 ## v.0.4.5
 
-- Tune alias list of commands on list of commands: example `show address ('?a'), show all ('list','l'), `
-- Added filer of unknown commands in list of commands: example
+- Tune alias list of commands on list of commands. For example: `show address ('?a'), show all ('list','l'), `
+- Added filter of unknown commands in list of commands. For example:
 
-````Enter your command >>> show
-List of commands: show address ('?a'), show all ('list','l'), show birthday ('?b'), show csv ('?csv'), show email ('?e'), show page ('?p'), show phone ('?p')```
+```
+Enter your command >>> show
+List of commands: show address ('?a'), show all ('list','l'), show birthday ('?b'), show csv ('?csv'), show email ('?e'), show page ('?p'), show phone ('?p')
+```
 
 ## v.0.4.4
 
@@ -156,7 +158,4 @@ Enter your command >>> ? q
 Exit of bot.
 Enter your command >>> q
 Goodbye. We are looking forward to seeing you again.
-
-```
-
 ```
