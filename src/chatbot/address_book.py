@@ -1,5 +1,6 @@
 from collections import UserDict
 from chatbot.record import Record
+import csv
 
 class AddressBook(UserDict):
 
@@ -61,6 +62,52 @@ class AddressBook(UserDict):
     def export_data(self) -> list:
         return [r.export_data() for r in self.data.values()]
 
+     
+    def _gen_filename(self, filename: str) -> str:
+        if self.id:
+            filename = f"{self.id}_{filename}"
+        return filename
+
+
+    def export_csv(self, *args) -> str:
+        if len(args) and args[0]:
+            filename = args[0]
+        else:
+            filename = self.default_filename + ".csv"
+        if filename and any(self.keys()):
+            with open(self._gen_filename(filename), "w") as csv_file:
+                fieldnames = Record.get_data_header_list()
+                csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+                rows = self.export_data()
+                if len(rows):
+                    csv_writer.writeheader()
+                    csv_writer.writerows(rows)
+
+            return f"saved to filename : {filename}"
+        else:
+            return False
+
+
+    def import_csv(self, *args) -> str:
+        if len(args) and args[0]:
+            filename = args[0]
+        else:
+            filename = self.default_filename + ".csv"
+        result = False
+        if filename:
+            try:
+                with open(self._gen_filename(filename), "r") as csv_file:
+                    csv_reader = csv.reader(csv_file, delimiter=',')
+                    csv_reader = csv.DictReader(csv_file)
+                    self.clear()     
+                    for csv_row in csv_reader:
+                        record = Record()
+                        if record.import_data(csv_row):
+                            self.add_record(record)
+                    result = True
+            except FileNotFoundError:
+                ...
+        return result
 
     def _split_line_by_commas(self, line):
         parts = []
@@ -79,14 +126,8 @@ class AddressBook(UserDict):
         parts.append(current_part.strip())
         return parts
 
-        
-    def _gen_filename(self, filename: str) -> str:
-        if self.id:
-            filename = f"{self.id}_{filename}"
-        return filename
 
-
-    def export_csv(self, *args) -> str:
+    def __export_csv_custom(self, *args) -> str:
         if len(args) and args[0]:
             filename = args[0]
         else:
@@ -97,10 +138,10 @@ class AddressBook(UserDict):
                 f.write(string)
             return f"saved to filename : {filename}"
         else:
-            return False
+            return False     
 
 
-    def import_csv(self, *args) -> str:
+    def __import_csv_custom(self, *args) -> str:
         if len(args) and args[0]:
             filename = args[0]
         else:
@@ -133,11 +174,13 @@ class AddressBook(UserDict):
                 ...
         return result
 
+
     def __enter__(self):
         #print("__enter__")
         if self.auto_restore:
             self.import_csv()
         return self
+
 
     def __exit__(self, ext_type, ext_value, traceback):
         #print("__exit___")
