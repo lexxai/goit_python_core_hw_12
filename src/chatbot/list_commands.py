@@ -338,6 +338,36 @@ def handler_search(*args, a_book) -> str:
     return result
 
 
+@output_operation_describe
+def handler_backup(*args, a_book) -> bool:
+    version = None
+    if any(args):
+        version = args[0]
+    result = a_book.backup_data(version)
+    return result
+
+
+@output_operation_describe
+def handler_restore(*args, a_book) -> bool:
+    version = None
+    if any(args):
+        version = args[0]
+    result = a_book.restore_data(version)
+    return result
+
+
+@output_operation_describe
+def handler_list_versions(*args, a_book) -> str:
+    result = a_book.list_versions()
+    return result
+    
+
+@output_operation_describe
+def handler_list_csv(*args, a_book) -> str:
+    result = a_book.list_csv()
+    return result    
+    
+
 @input_error
 def api(command: str, *args: list[str], a_book, verbose: bool = True) -> None:
     """API for run commands in batch mode
@@ -368,7 +398,6 @@ COMMANDS = {
     handler_change_phone: ("change phone", "=p"),
     handler_delete_phone: ("delete phone","-p"),
     handler_show_phone: ("show phone","?p"),
-    handler_show_all: ("show all", "list", "l"),
     handler_show_page: ("show page","?p"),
     handler_show_csv: ("show csv","?csv"),
     handler_export_csv: ("export csv", "e"),
@@ -384,6 +413,11 @@ COMMANDS = {
     handler_show_birthday: ("show birthday","?b"),
     handler_show_email: ("show email","?e"),
     handler_show_address: ("show address","?a"),
+    handler_backup: ("backup", "bak"),
+    handler_restore: ("restore", "res"),
+    handler_list_versions: ("list versions", "lv"),    
+    handler_list_csv: ("list csv", "lcsv"),     
+    handler_show_all: ("show all", "list", "l"),
     handler_add: ("add", "+"),
     handler_search: ("search","?="),
     handler_exit: ("good bye", "close", "exit", "q", "quit"),
@@ -414,14 +448,19 @@ COMMANDS_HELP = {
     handler_show_all: "Show all user's record.",
     handler_show_page: "Show all user's record per page. Optional parameter size of page [{per_page}]",
     handler_show_csv: "Show all user's record in csv format",
-    handler_export_csv: ("Export all user's record in csv format to file. Optional parameter filename",),
-    handler_import_csv: ("Import all user's record in csv format to file. Optional parameter filename",),
+    handler_export_csv: "Export all user's record in csv format to file. Optional parameter filename",
+    handler_import_csv: "Import all user's record in csv format to file. Optional parameter filename",
     handler_days_to_birthday: "Show days until the user's birthday. Required username,",
     handler_add: "Add user's phone or multiple phones separated by space. "
                  "Required username and phone.",
     handler_help: "List of commands and their description. Also you can use '?' "
                   "for any command as parameter. Session ID: {id_session}",
     handler_exit: "Exit of bot.",
-    handler_search: ("Search user by pattern in name or phone",),
+    handler_search: "Search user by pattern in name or phone",
+    handler_backup: "Backup all records. Optional parameter is the version. "
+                     "P.S. it done automatically after any changes on records",
+    handler_restore: "Restore all records. Optional parameter is the version.",
+    handler_list_versions: "List of saved backup versions",
+    handler_list_csv: "List of saved cvs files",
     handler_undefined: "Help for this command is not yet available"
 }

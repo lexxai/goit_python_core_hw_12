@@ -2,6 +2,7 @@ from collections import UserDict
 from chatbot.record import Record
 import csv
 import pickle
+from  pathlib import Path
 
 
 class AddressBook(UserDict):
@@ -70,6 +71,11 @@ class AddressBook(UserDict):
             filename = f"{self.id}_{filename}"
         return filename
 
+    def _clean_filename(self, filename: str) -> str:
+        if self.id and self.id in filename:
+            filename = filename[len(self.id)+1:]
+        return filename
+
 
     def export_csv(self, *args) -> str:
         if len(args) and args[0]:
@@ -134,20 +140,42 @@ class AddressBook(UserDict):
         parts.append(current_part.strip())
         return parts
 
-    def backup_data(self):
-        filename = self.default_filename + ".bin"
+    def backup_data(self, version=None):
+        if version:
+            filename = f"{self.default_filename}_{version}.bin"
+        else:
+            filename = f"{self.default_filename}.bin"
         with open(self._gen_filename(filename), "wb") as file:
             pickle.dump(self, file)
+        return True
 
-
-    def restore_data(self):
-        filename = self.default_filename + ".bin"   
+    def restore_data(self, version=None):
+        if version:
+            filename = f"{self.default_filename}_{version}.bin"
+        else:
+            filename = f"{self.default_filename}.bin"
         with open(self._gen_filename(filename), "rb") as file:
             content = pickle.load(file)
-        return content
+            if type(content) == type(self):
+                self.__dict__.update(content.__dict__)
+                return True
         
-
-
+    def list_versions(self):
+        filename = f"{self.default_filename}_*.bin"
+        list_files = Path('.').glob(self._gen_filename(filename))
+        result_version = []
+        for found_file in list_files:
+            result_version.append("version: {}".format(found_file.stem.split("_")[-1]))
+        return "\n".join(result_version) if any(result_version) else True
+    
+    def list_csv(self):
+        filename = "*.csv"
+        list_files = Path('.').glob(self._gen_filename(filename))
+        result_version = []
+        for found_file in list_files:
+            result_version.append(self._clean_filename(found_file.name))
+        return "\n".join(result_version) if any(result_version) else True
+    
 
     def __export_csv_custom(self, *args) -> str:
         if len(args) and args[0]:

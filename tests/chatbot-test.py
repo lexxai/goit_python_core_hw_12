@@ -35,7 +35,7 @@ if __name__ == "__main__":
         api("help", "add birthday", a_book=a_book)
 
     ChatBot.main(id="user-session-000001",
-                  auto_backup=True,
-                  auto_restore = True, 
+                  auto_backup=False,
+                  auto_restore = False, 
                   init_callback = None)
 
