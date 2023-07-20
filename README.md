@@ -5,11 +5,10 @@
 - For class "address_book" was added methods for binary backup_data and restore_data by use module pickle.
 - Main part added decorator for backup_data of selected handlers of commands
 - added commands:
-
-* backup [version]
-* restore [version]
-* list versions
-* list csv
+  * backup [version]
+  * restore [version]
+  * list versions
+  * list csv
 
 ## v.0.4.5
 
