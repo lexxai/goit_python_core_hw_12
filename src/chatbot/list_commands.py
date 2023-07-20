@@ -40,6 +40,15 @@ def parse_input(command_line: str) -> tuple[object, list]:
     return handler_undefined, [line]
 
 
+def backup_data(func):
+    @wraps(func)
+    def wrapper(*args, a_book, **kwargs):
+        result = func(*args, a_book=a_book, **kwargs)
+        a_book.backup_data()
+        return result
+    return wrapper
+
+    
 def input_error(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
@@ -68,6 +77,7 @@ def output_operation_describe(func):
 
 
 @output_operation_describe
+@backup_data
 @input_error
 def handler_add(*args, a_book) -> str:
     result = None
@@ -83,6 +93,7 @@ def handler_add(*args, a_book) -> str:
 
 
 @output_operation_describe
+@backup_data
 @input_error
 def handler_change_phone(*args, a_book) -> str:
     user = args[0]
@@ -99,6 +110,7 @@ def handler_show_phone(*args, a_book) -> str:
 
 
 @output_operation_describe
+@backup_data
 @input_error
 def handler_delete_phone(*args, a_book) -> str:
     user = args[0]
@@ -107,6 +119,7 @@ def handler_delete_phone(*args, a_book) -> str:
 
 
 @output_operation_describe
+@backup_data
 @input_error
 def handler_delete_record(*args, a_book) -> str:
     user = args[0]
@@ -114,6 +127,7 @@ def handler_delete_record(*args, a_book) -> str:
 
 
 @output_operation_describe
+@backup_data
 @input_error
 def handler_delete_all_records(*args, a_book) -> str:
     if args[0] == "YES":
@@ -209,6 +223,7 @@ def handler_help(*args, a_book, help_filter=None) -> str:
 
 
 @output_operation_describe
+@backup_data
 @input_error
 def handler_add_birthday(*args, a_book) -> str:
     user = args[0]
@@ -217,6 +232,7 @@ def handler_add_birthday(*args, a_book) -> str:
 
 
 @output_operation_describe
+@backup_data
 @input_error
 def handler_add_email(*args, a_book) -> str:
     user = args[0]
@@ -225,6 +241,7 @@ def handler_add_email(*args, a_book) -> str:
 
 
 @output_operation_describe
+@backup_data
 @input_error
 def handler_add_address(*args, a_book) -> str:
     user = args[0]
@@ -233,6 +250,7 @@ def handler_add_address(*args, a_book) -> str:
 
 
 @output_operation_describe
+@backup_data
 @input_error
 def handler_delete_birthday(*args, a_book) -> str:
     user = args[0]
@@ -240,6 +258,7 @@ def handler_delete_birthday(*args, a_book) -> str:
 
 
 @output_operation_describe
+@backup_data
 @input_error
 def handler_delete_email(*args, a_book) -> str:
     user = args[0]
@@ -247,6 +266,7 @@ def handler_delete_email(*args, a_book) -> str:
 
 
 @output_operation_describe
+@backup_data
 @input_error
 def handler_delete_address(*args, a_book) -> str:
     user = args[0]

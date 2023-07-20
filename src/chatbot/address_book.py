@@ -1,6 +1,8 @@
 from collections import UserDict
 from chatbot.record import Record
 import csv
+import pickle
+
 
 class AddressBook(UserDict):
 
@@ -131,6 +133,20 @@ class AddressBook(UserDict):
 
         parts.append(current_part.strip())
         return parts
+
+    def backup_data(self):
+        filename = self.default_filename + ".bin"
+        with open(self._gen_filename(filename), "wb") as file:
+            pickle.dump(self, file)
+
+
+    def restore_data(self):
+        filename = self.default_filename + ".bin"   
+        with open(self._gen_filename(filename), "rb") as file:
+            content = pickle.load(file)
+        return content
+        
+
 
 
     def __export_csv_custom(self, *args) -> str:
