@@ -197,16 +197,6 @@ Import all user's record in csv format to file. Optional parameter filename
 Enter your command >>> import csv chatboot_addresbook.csv
 Done
 Enter your command >>> list
-name: Jon-00, phones: +38044333223, birthday: 1988-02-17
-name: Jon-01, phones: +38044333223;33441
-name: Jon-02, phones: +38044333223;33442, email: jon02@example.com, address: Vul. Vorota gate 02, office. 1221344, birthday: 1999-08-11
-name: Jon-03, phones: +38044333223;33443
-name: Jon-04, phones: +38044333223;33444
-name: Jon-05, phones: +38044333223;33445, address: Vul. Vorota gate 112, office. 2332
-name: Jon-06, phones: +38044333223;33446
-name: Jon-07, phones: +38044333223;33447, address: Vul. Vorota gate 122
-name: Jon-08, phones: +38044333223;33448
-name: Jon-09, phones: +38044333223;33449
 name: Jon-10, phones: +38044333223;33450
 name: Jon 12, phones: +38044333223
 name: Abrams, phones: 999, address: dsdsd dwd wdwd wd wdw wd wdwdwdw wd w
@@ -219,16 +209,6 @@ Done
 Enter your command >>> - "Jon 17"
 Done
 Enter your command >>> list
-name: Jon-00, phones: +38044333223, birthday: 1988-02-17
-name: Jon-01, phones: +38044333223;33441
-name: Jon-02, phones: +38044333223;33442, email: jon02@example.com, address: Vul. Vorota gate 02, office. 1221344, birthday: 1999-08-11
-name: Jon-03, phones: +38044333223;33443
-name: Jon-04, phones: +38044333223;33444
-name: Jon-05, phones: +38044333223;33445, address: Vul. Vorota gate 112, office. 2332
-name: Jon-06, phones: +38044333223;33446
-name: Jon-07, phones: +38044333223;33447, address: Vul. Vorota gate 122
-name: Jon-08, phones: +38044333223;33448
-name: Jon-09, phones: +38044333223;33449
 name: Jon-10, phones: +38044333223;33450
 name: Jon 12, phones: +38044333223
 name: Abrams, phones: 999, address: dsdsd dwd wdwd wd wdw wd wdwdwdw wd w
@@ -236,16 +216,6 @@ name: www, phones: 2222
 Enter your command >>> - "Jon 12"
 Done
 Enter your command >>> l
-name: Jon-00, phones: +38044333223, birthday: 1988-02-17
-name: Jon-01, phones: +38044333223;33441
-name: Jon-02, phones: +38044333223;33442, email: jon02@example.com, address: Vul. Vorota gate 02, office. 1221344, birthday: 1999-08-11
-name: Jon-03, phones: +38044333223;33443
-name: Jon-04, phones: +38044333223;33444
-name: Jon-05, phones: +38044333223;33445, address: Vul. Vorota gate 112, office. 2332
-name: Jon-06, phones: +38044333223;33446
-name: Jon-07, phones: +38044333223;33447, address: Vul. Vorota gate 122
-name: Jon-08, phones: +38044333223;33448
-name: Jon-09, phones: +38044333223;33449
 name: Jon-10, phones: +38044333223;33450
 name: Abrams, phones: 999, address: dsdsd dwd wdwd wd wdw wd wdwdwdw wd w
 name: www, phones: 2222
@@ -254,16 +224,6 @@ Done
 Enter your command >>> add Ostap 1232333
 Done
 Enter your command >>> list
-name: Jon-00, phones: +38044333223, birthday: 1988-02-17
-name: Jon-01, phones: +38044333223;33441
-name: Jon-02, phones: +38044333223;33442, email: jon02@example.com, address: Vul. Vorota gate 02, office. 1221344, birthday: 1999-08-11
-name: Jon-03, phones: +38044333223;33443
-name: Jon-04, phones: +38044333223;33444
-name: Jon-05, phones: +38044333223;33445, address: Vul. Vorota gate 112, office. 2332
-name: Jon-06, phones: +38044333223;33446
-name: Jon-07, phones: +38044333223;33447, address: Vul. Vorota gate 122
-name: Jon-08, phones: +38044333223;33448
-name: Jon-09, phones: +38044333223;33449
 name: Jon-10, phones: +38044333223;33450
 name: Abrams, phones: 999, address: dsdsd dwd wdwd wd wdw wd wdwdwdw wd w
 name: www, phones: 2222
@@ -284,16 +244,6 @@ Restore all records. Optional parameter is the version.
 Enter your command >>> restore 2
 Done
 Enter your command >>> list
-name: Jon-00, phones: +38044333223, birthday: 1988-02-17
-name: Jon-01, phones: +38044333223;33441
-name: Jon-02, phones: +38044333223;33442, email: jon02@example.com, address: Vul. Vorota gate 02, office. 1221344, birthday: 1999-08-11
-name: Jon-03, phones: +38044333223;33443
-name: Jon-04, phones: +38044333223;33444
-name: Jon-05, phones: +38044333223;33445, address: Vul. Vorota gate 112, office. 2332
-name: Jon-06, phones: +38044333223;33446
-name: Jon-07, phones: +38044333223;33447, address: Vul. Vorota gate 122
-name: Jon-08, phones: +38044333223;33448
-name: Jon-09, phones: +38044333223;33449
 name: Jon-10, phones: +38044333223;33450
 name: Abrams, phones: 999, address: dsdsd dwd wdwd wd wdw wd wdwdwdw wd w
 name: www, phones: 2222
@@ -301,16 +251,6 @@ name: Ostap, phones: 1232333
 Enter your command >>> restore 1
 Done
 Enter your command >>> list
-name: Jon-00, phones: +38044333223, birthday: 1988-02-17
-name: Jon-01, phones: +38044333223;33441
-name: Jon-02, phones: +38044333223;33442, email: jon02@example.com, address: Vul. Vorota gate 02, office. 1221344, birthday: 1999-08-11
-name: Jon-03, phones: +38044333223;33443
-name: Jon-04, phones: +38044333223;33444
-name: Jon-05, phones: +38044333223;33445, address: Vul. Vorota gate 112, office. 2332
-name: Jon-06, phones: +38044333223;33446
-name: Jon-07, phones: +38044333223;33447, address: Vul. Vorota gate 122
-name: Jon-08, phones: +38044333223;33448
-name: Jon-09, phones: +38044333223;33449
 name: Jon-10, phones: +38044333223;33450
 name: Abrams, phones: 999, address: dsdsd dwd wdwd wd wdw wd wdwdwdw wd w
 name: www, phones: 2222
@@ -321,16 +261,6 @@ No users found, maybe you want to add them first?
 Enter your command >>> restore 2
 Done
 Enter your command >>> list
-name: Jon-00, phones: +38044333223, birthday: 1988-02-17
-name: Jon-01, phones: +38044333223;33441
-name: Jon-02, phones: +38044333223;33442, email: jon02@example.com, address: Vul. Vorota gate 02, office. 1221344, birthday: 1999-08-11
-name: Jon-03, phones: +38044333223;33443
-name: Jon-04, phones: +38044333223;33444
-name: Jon-05, phones: +38044333223;33445, address: Vul. Vorota gate 112, office. 2332
-name: Jon-06, phones: +38044333223;33446
-name: Jon-07, phones: +38044333223;33447, address: Vul. Vorota gate 122
-name: Jon-08, phones: +38044333223;33448
-name: Jon-09, phones: +38044333223;33449
 name: Jon-10, phones: +38044333223;33450
 name: Abrams, phones: 999, address: dsdsd dwd wdwd wd wdw wd wdwdwdw wd w
 name: www, phones: 2222
