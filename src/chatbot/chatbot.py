@@ -1,5 +1,5 @@
 from chatbot.class_commands import Commands
-from chatbot.address_book import AddressBook
+from chatbot.class_address_book import AddressBook
 
 # from chatbot.list_commands import parse_input,\
 #     handler_help, handler_exit
@@ -10,6 +10,7 @@ class ChatBot(Commands):
                  auto_backup: bool = True,
                  auto_restore: bool = True,
                  init_callback=None):
+        self.id_session = id
         self.a_book = AddressBook(id=id,
                                   auto_backup=auto_backup,
                                   auto_restore=auto_restore)
@@ -17,7 +18,7 @@ class ChatBot(Commands):
         super().__init__(self.a_book)
 
         if init_callback:
-            init_callback(self.a_book)
+            init_callback(self)
 
 
     def main(self):
