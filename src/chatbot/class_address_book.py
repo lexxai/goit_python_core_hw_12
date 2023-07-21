@@ -1,5 +1,5 @@
 from collections import UserDict
-from chatbot.record import Record
+from chatbot.class_record import Record
 import csv
 import pickle
 from  pathlib import Path

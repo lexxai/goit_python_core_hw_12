@@ -1,4 +1,4 @@
-from chatbot.fields import Field, Name, Phone, Email, Address, Birthday
+from chatbot.class_fields import Field, Name, Phone, Email, Address, Birthday
 from datetime import date
 
 class Record:

@@ -1,5 +1,5 @@
-from chatbot.fields import Name, Phone, Birthday, Email, Address
-from chatbot.record import Record
+from chatbot.class_fields import Name, Phone, Birthday, Email, Address
+from chatbot.class_record import Record
 from functools import wraps
 
 
@@ -62,8 +62,9 @@ class Commands:
                 return func(self, *args, **kwargs)
             except (KeyError, ValueError, IndexError) as e:
                 error = str(e)
-                return f"Sorry, there are not enough parameters or their value may be incorrect {error}. "\
-                    "Please use the help for more information. "
+                return  "Sorry, there are not enough parameters "\
+                       f"or their value may be incorrect {error}. "\
+                        "Please use the help for more information. "
             except (FileNotFoundError):
                 return "Sorry, there operation with file is incorrect."
             except Exception as e:
@@ -105,7 +106,8 @@ class Commands:
         user = args[0]
         old_phone = args[1]
         new_phone = args[2]
-        return self.a_book.get_record(user).change_phone(Phone(old_phone), Phone(new_phone))
+        return self.a_book.get_record(user)\
+            .change_phone(Phone(old_phone), Phone(new_phone))
 
 
     @output_operation_describe
@@ -196,7 +198,7 @@ class Commands:
             command = args[0]
         if not command:
             commands = []
-            for cs in self.COMMANDS.values():
+            for cs in Commands.COMMANDS.values():
                 if help_filter and not any(
                     filter(lambda x: x.startswith(help_filter), cs)
                     ):
@@ -212,14 +214,13 @@ class Commands:
                 if any(c_alias):
                     c_str += f" ({c_alias_str})"
                 commands.append(c_str)
-            #commands = sorted(list(c for cs in self.COMMANDS.values() for c in list(cs)))
             return "List of commands: " + ", ".join(sorted(commands))
         else:
             if type(command) == str:
                 command = " ".join(args)
-                command = get_command_handler(command)
-            command_str: str = self.COMMANDS_HELP.get(command,
-                                                "Help for this command is not yet available")
+                command = self.get_command_handler(command)
+            command_str: str = Commands.COMMANDS_HELP.get(command,
+                            "Help for this command is not yet available")
             if "{" in command_str:
                 command_str = command_str.format(
                     per_page=self.a_book.max_records_per_page,
@@ -374,7 +375,7 @@ class Commands:
         return result    
         
 
-    #@input_error
+    @input_error
     def api(self, command: str, *args: list[str], verbose: bool = True) -> None:
         """API for run commands in batch mode
 
@@ -406,8 +407,8 @@ class Commands:
         handler_show_phone: ("show phone","?p"),
         handler_show_page: ("show page","?p"),
         handler_show_csv: ("show csv","?csv"),
-        handler_export_csv: ("export csv", "e"),
-        handler_import_csv: ("import csv", "i"),
+        handler_export_csv: ("export csv", "e csv"),
+        handler_import_csv: ("import csv", "i csv"),
         handler_help: ("help", "?"),
         handler_add_birthday: ("add birthday","+b"),
         handler_delete_birthday: ("delete birthday","-b"),
@@ -421,8 +422,8 @@ class Commands:
         handler_show_address: ("show address","?a"),
         handler_backup: ("backup", "bak"),
         handler_restore: ("restore", "res"),
-        handler_list_versions: ("list versions", "lv"),    
-        handler_list_csv: ("list csv", "lcsv"),     
+        handler_list_versions: ("list versions", "l v"),    
+        handler_list_csv: ("list csv", "l csv"),     
         handler_show_all: ("show all", "list", "l"),
         handler_add: ("add", "+"),
         handler_search: ("search","?="),
