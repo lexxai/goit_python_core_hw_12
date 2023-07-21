@@ -346,6 +346,7 @@ class Commands:
 
 
     @output_operation_describe
+    @input_error
     def handler_backup(self, *args) -> bool:
         version = None
         if any(args):
@@ -355,6 +356,7 @@ class Commands:
 
 
     @output_operation_describe
+    @input_error
     def handler_restore(self, *args) -> bool:
         version = None
         if any(args):

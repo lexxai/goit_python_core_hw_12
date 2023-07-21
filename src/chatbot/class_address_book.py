@@ -154,11 +154,14 @@ class AddressBook(UserDict):
             filename = f"{self.default_filename}_{version}.bin"
         else:
             filename = f"{self.default_filename}.bin"
-        with open(self._gen_filename(filename), "rb") as file:
-            content = pickle.load(file)
-            if type(content) == type(self):
-                self.__dict__.update(content.__dict__)
-                return True
+        try:    
+            with open(self._gen_filename(filename), "rb") as file:
+                content = pickle.load(file)
+                if type(content) == type(self):
+                    self.__dict__.update(content.__dict__)
+                    return True
+        except Exception:
+            return False
         
     def list_versions(self):
         filename = f"{self.default_filename}_*.bin"
@@ -225,17 +228,17 @@ class AddressBook(UserDict):
         return result
 
 
-    def __enter__(self):
-        #print("__enter__")
-        if self.auto_restore:
-            self.import_csv()
-        return self
+    # def __enter__(self):
+    #     #print("__enter__")
+    #     if self.auto_restore:
+    #         self.import_csv()
+    #     return self
 
 
-    def __exit__(self, ext_type, ext_value, traceback):
-        #print("__exit___")
-        if self.auto_backup:
-            self.export_csv()
+    # def __exit__(self, ext_type, ext_value, traceback):
+    #     #print("__exit___")
+    #     if self.auto_backup:
+    #         self.export_csv()
 
     
     def __str__(self) -> str:

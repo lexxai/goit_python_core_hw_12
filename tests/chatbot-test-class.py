@@ -35,18 +35,19 @@ if __name__ == "__main__":
     session = "user-session-000001"
     chat = ChatBot(id=session,
                     auto_backup=True,
-                    auto_restore=False, init_callback=None)
+                    auto_restore=True, init_callback=None)
     chats.append(chat)
     for c in chats:
         print(f"Session: {c.id_session}")
     #init_chat(chat)
-    verbose = False
-    chat.api("add", "Jon-00", "+38044333223", "+38044333221", verbose=verbose)
-    chat.api("add email", "Jon-00", "jon05@example.com", verbose=verbose)
-    chat.api("add address", "Jon-00",
-             "вул. Ворота Гетьмана, буд. 02, офіс. 121-344", verbose=verbose)
-    chat.api("add birthday", "Jon-00", "1999-08-11", verbose=verbose)
-    chat.api("help", "add birthday", verbose=verbose)
+    if False:
+        verbose = False
+        chat.api("add", "Jon-00", "+38044333223", "+38044333221", verbose=verbose)
+        chat.api("add email", "Jon-00", "jon05@example.com", verbose=verbose)
+        chat.api("add address", "Jon-00",
+                "вул. Ворота Гетьмана, буд. 02, офіс. 121-344", verbose=verbose)
+        chat.api("add birthday", "Jon-00", "1999-08-11", verbose=verbose)
+        chat.api("help", "add birthday", verbose=verbose)
     chat.main()
 
 
