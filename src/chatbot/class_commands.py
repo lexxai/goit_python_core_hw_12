@@ -328,12 +328,12 @@ class Commands:
         return self.handler_help(help_filter=command)
 
 
-    def get_command_handler(command: str) -> object:
-        for ch in self.COMMANDS:
-            for cs in self.COMMANDS[ch]:
+    def get_command_handler(self, command: str) -> object:
+        for ch in Commands.COMMANDS:
+            for cs in Commands.COMMANDS[ch]:
                 if cs == command:
                     return ch
-        return self.handler_undefined
+        return Commands.handler_undefined
 
 
     @output_operation_describe
@@ -374,7 +374,7 @@ class Commands:
         return result    
         
 
-    @input_error
+    #@input_error
     def api(self, command: str, *args: list[str], verbose: bool = True) -> None:
         """API for run commands in batch mode
 
@@ -386,7 +386,7 @@ class Commands:
             print API command result
         
         """
-        result = self.get_command_handler(command)(*args)
+        result = self.get_command_handler(command)(self, *args)
         if verbose:
             print(f"api command '{command}': {result}")
         else:
